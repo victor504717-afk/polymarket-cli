@@ -2,7 +2,7 @@ use std::env;
 use std::fs;
 use std::process::Command;
 
-use anyhow::{bail, Context};
+use anyhow::{Context, bail};
 
 const REPO: &str = "polymarket/polymarket-cli";
 const BINARY: &str = "polymarket";
@@ -32,11 +32,9 @@ pub fn execute() -> anyhow::Result<()> {
     let tmpdir = tempdir()?;
     let tarball = format!("{tmpdir}/{BINARY}.tar.gz");
 
-    let tarball_name =
-        format!("{BINARY}-{latest_tag}-{target}.tar.gz");
-    let checksums_url = format!(
-        "https://github.com/{REPO}/releases/download/{latest_tag}/checksums.txt"
-    );
+    let tarball_name = format!("{BINARY}-{latest_tag}-{target}.tar.gz");
+    let checksums_url =
+        format!("https://github.com/{REPO}/releases/download/{latest_tag}/checksums.txt");
 
     println!("Downloading {latest_tag} ({target})...");
 
@@ -78,8 +76,7 @@ pub fn execute() -> anyhow::Result<()> {
         .or_else(|_| sudo_mv(exe_path, &backup))
         .context("Failed to replace binary (try running with sudo)")?;
 
-    if let Err(e) = fs::rename(&new_binary, exe_path).or_else(|_| sudo_mv(&new_binary, exe_path))
-    {
+    if let Err(e) = fs::rename(&new_binary, exe_path).or_else(|_| sudo_mv(&new_binary, exe_path)) {
         // Restore backup on failure
         let _ = fs::rename(&backup, exe_path);
         return Err(e).context("Failed to install new binary");
@@ -146,7 +143,11 @@ fn tempdir() -> anyhow::Result<String> {
     Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
 }
 
-fn verify_checksum(file_path: &str, checksums_file: &str, expected_name: &str) -> anyhow::Result<()> {
+fn verify_checksum(
+    file_path: &str,
+    checksums_file: &str,
+    expected_name: &str,
+) -> anyhow::Result<()> {
     let checksums = fs::read_to_string(checksums_file).context("Failed to read checksums.txt")?;
 
     let expected_hash = checksums
@@ -161,7 +162,9 @@ fn verify_checksum(file_path: &str, checksums_file: &str, expected_name: &str) -
                 None
             }
         })
-        .context(format!("No checksum found for {expected_name} in checksums.txt"))?;
+        .context(format!(
+            "No checksum found for {expected_name} in checksums.txt"
+        ))?;
 
     let output = Command::new("shasum")
         .args(["-a", "256", file_path])
@@ -190,9 +193,7 @@ fn verify_checksum(file_path: &str, checksums_file: &str, expected_name: &str) -
 }
 
 fn sudo_mv(from: &str, to: &str) -> std::io::Result<()> {
-    let status = Command::new("sudo")
-        .args(["mv", from, to])
-        .status()?;
+    let status = Command::new("sudo").args(["mv", from, to]).status()?;
     if status.success() {
         Ok(())
     } else {

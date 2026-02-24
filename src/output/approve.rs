@@ -72,21 +72,14 @@ pub fn print_approval_status(statuses: &[ApprovalStatus], output: &OutputFormat)
                     ctf: format_ctf(s.ctf_approved),
                 })
                 .collect();
-            let table = tabled::Table::new(rows)
-                .with(Style::rounded())
-                .to_string();
+            let table = tabled::Table::new(rows).with(Style::rounded()).to_string();
             println!("{table}");
             Ok(())
         }
     }
 }
 
-pub fn print_tx_result(
-    step: usize,
-    total: usize,
-    label: &str,
-    tx_hash: alloy::primitives::B256,
-) {
+pub fn print_tx_result(step: usize, total: usize, label: &str, tx_hash: alloy::primitives::B256) {
     let hash_str = format!("{tx_hash}");
     let short = &hash_str[..10];
     println!("  [{step}/{total}] {label:<30} \u{2713} {short}\u{2026}");

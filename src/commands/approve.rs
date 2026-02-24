@@ -51,10 +51,9 @@ struct ApprovalTarget {
 }
 
 fn approval_targets() -> Result<Vec<ApprovalTarget>> {
-    let config = contract_config(POLYGON, false)
-        .context("No contract config for Polygon")?;
-    let neg_risk_config = contract_config(POLYGON, true)
-        .context("No neg-risk contract config for Polygon")?;
+    let config = contract_config(POLYGON, false).context("No contract config for Polygon")?;
+    let neg_risk_config =
+        contract_config(POLYGON, true).context("No neg-risk contract config for Polygon")?;
 
     let mut targets = vec![
         ApprovalTarget {
@@ -101,8 +100,7 @@ async fn check(
     };
 
     let provider = auth::create_readonly_provider().await?;
-    let config = contract_config(POLYGON, false)
-        .context("No contract config for Polygon")?;
+    let config = contract_config(POLYGON, false).context("No contract config for Polygon")?;
 
     let usdc = IERC20::new(USDC_ADDRESS, provider.clone());
     let ctf = IERC1155::new(config.conditional_tokens, provider.clone());
@@ -136,8 +134,7 @@ async fn check(
 
 async fn set(private_key: Option<&str>, output: OutputFormat) -> Result<()> {
     let provider = auth::create_provider(private_key).await?;
-    let config = contract_config(POLYGON, false)
-        .context("No contract config for Polygon")?;
+    let config = contract_config(POLYGON, false).context("No contract config for Polygon")?;
 
     let usdc = IERC20::new(USDC_ADDRESS, provider.clone());
     let ctf = IERC1155::new(config.conditional_tokens, provider.clone());

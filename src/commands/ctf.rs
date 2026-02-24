@@ -131,10 +131,7 @@ fn usdc_to_raw(val: Decimal) -> Result<U256> {
 }
 
 fn parse_usdc_amount(s: &str) -> Result<U256> {
-    let val: Decimal = s
-        .trim()
-        .parse()
-        .context(format!("Invalid amount: {s}"))?;
+    let val: Decimal = s.trim().parse().context(format!("Invalid amount: {s}"))?;
     anyhow::ensure!(val > Decimal::ZERO, "Amount must be positive");
     usdc_to_raw(val)
 }
@@ -146,7 +143,10 @@ fn parse_usdc_amounts(s: &str) -> Result<Vec<U256>> {
             let val: Decimal = trimmed
                 .parse()
                 .context(format!("Invalid amount: {trimmed}"))?;
-            anyhow::ensure!(val >= Decimal::ZERO, "Amount must be non-negative: {trimmed}");
+            anyhow::ensure!(
+                val >= Decimal::ZERO,
+                "Amount must be non-negative: {trimmed}"
+            );
             usdc_to_raw(val)
         })
         .collect()
@@ -183,11 +183,7 @@ fn default_index_sets() -> Vec<U256> {
     vec![U256::from(1), U256::from(2)]
 }
 
-pub async fn execute(
-    args: CtfArgs,
-    output: OutputFormat,
-    private_key: Option<&str>,
-) -> Result<()> {
+pub async fn execute(args: CtfArgs, output: OutputFormat, private_key: Option<&str>) -> Result<()> {
     match args.command {
         CtfCommand::Split {
             condition,
@@ -221,12 +217,7 @@ pub async fn execute(
                 .await
                 .context("Split position failed")?;
 
-            ctf_output::print_tx_result(
-                "split",
-                resp.transaction_hash,
-                resp.block_number,
-                &output,
-            )
+            ctf_output::print_tx_result("split", resp.transaction_hash, resp.block_number, &output)
         }
         CtfCommand::Merge {
             condition,
@@ -260,12 +251,7 @@ pub async fn execute(
                 .await
                 .context("Merge positions failed")?;
 
-            ctf_output::print_tx_result(
-                "merge",
-                resp.transaction_hash,
-                resp.block_number,
-                &output,
-            )
+            ctf_output::print_tx_result("merge", resp.transaction_hash, resp.block_number, &output)
         }
         CtfCommand::Redeem {
             condition,
@@ -296,17 +282,9 @@ pub async fn execute(
                 .await
                 .context("Redeem positions failed")?;
 
-            ctf_output::print_tx_result(
-                "redeem",
-                resp.transaction_hash,
-                resp.block_number,
-                &output,
-            )
+            ctf_output::print_tx_result("redeem", resp.transaction_hash, resp.block_number, &output)
         }
-        CtfCommand::RedeemNegRisk {
-            condition,
-            amounts,
-        } => {
+        CtfCommand::RedeemNegRisk { condition, amounts } => {
             let condition_id = super::parse_condition_id(&condition)?;
             let amounts = parse_usdc_amounts(&amounts)?;
 
@@ -471,10 +449,7 @@ mod tests {
     #[test]
     fn parse_usdc_amounts_zero_is_allowed() {
         let result = parse_usdc_amounts("0,10").unwrap();
-        assert_eq!(
-            result,
-            vec![U256::from(0u64), U256::from(10_000_000u64)]
-        );
+        assert_eq!(result, vec![U256::from(0u64), U256::from(10_000_000u64)]);
     }
 
     #[test]

@@ -196,9 +196,7 @@ fn series_help_lists_subcommands() {
         .args(["series", "--help"])
         .assert()
         .success()
-        .stdout(
-            predicate::str::contains("list").and(predicate::str::contains("get")),
-        );
+        .stdout(predicate::str::contains("list").and(predicate::str::contains("get")));
 }
 
 #[test]
@@ -299,7 +297,10 @@ fn comments_get_requires_id() {
 
 #[test]
 fn comments_by_user_requires_address() {
-    polymarket().args(["comments", "by-user"]).assert().failure();
+    polymarket()
+        .args(["comments", "by-user"])
+        .assert()
+        .failure();
 }
 
 #[test]
@@ -328,9 +329,7 @@ fn approve_help_lists_subcommands() {
         .args(["approve", "--help"])
         .assert()
         .success()
-        .stdout(
-            predicate::str::contains("check").and(predicate::str::contains("set")),
-        );
+        .stdout(predicate::str::contains("check").and(predicate::str::contains("set")));
 }
 
 #[test]
@@ -460,10 +459,7 @@ fn ctf_condition_id_requires_question() {
 
 #[test]
 fn ctf_position_id_requires_collection() {
-    polymarket()
-        .args(["ctf", "position-id"])
-        .assert()
-        .failure();
+    polymarket().args(["ctf", "position-id"]).assert().failure();
 }
 
 #[test]
@@ -486,10 +482,7 @@ fn table_output_is_default() {
 #[test]
 fn wallet_address_succeeds_or_fails_gracefully() {
     // If no wallet configured, should fail with error; if configured, should succeed
-    let output = polymarket()
-        .args(["wallet", "address"])
-        .output()
-        .unwrap();
+    let output = polymarket().args(["wallet", "address"]).output().unwrap();
     // Either succeeds or fails with an error message — not a panic
     assert!(output.status.success() || !output.stderr.is_empty());
 }

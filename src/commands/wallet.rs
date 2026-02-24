@@ -236,7 +236,10 @@ fn cmd_reset(output: &OutputFormat, force: bool) -> Result<()> {
         match output {
             OutputFormat::Table => println!("Nothing to reset. No config found."),
             OutputFormat::Json => {
-                println!("{}", serde_json::json!({"reset": false, "reason": "no config found"}));
+                println!(
+                    "{}",
+                    serde_json::json!({"reset": false, "reason": "no config found"})
+                );
             }
         }
         return Ok(());

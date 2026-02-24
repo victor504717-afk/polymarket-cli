@@ -1001,8 +1001,10 @@ mod tests {
 
     #[test]
     fn parse_token_id_large_number() {
-        let id =
-            parse_token_id("48331043336612883890938759509493159234755048973583954730006854632066573").unwrap();
+        let id = parse_token_id(
+            "48331043336612883890938759509493159234755048973583954730006854632066573",
+        )
+        .unwrap();
         assert!(id > U256::ZERO);
     }
 
@@ -1028,13 +1030,19 @@ mod tests {
     #[test]
     fn parse_token_ids_multiple() {
         let ids = parse_token_ids("1,2,3").unwrap();
-        assert_eq!(ids, vec![U256::from(1u64), U256::from(2u64), U256::from(3u64)]);
+        assert_eq!(
+            ids,
+            vec![U256::from(1u64), U256::from(2u64), U256::from(3u64)]
+        );
     }
 
     #[test]
     fn parse_token_ids_with_spaces() {
         let ids = parse_token_ids("1, 2, 3").unwrap();
-        assert_eq!(ids, vec![U256::from(1u64), U256::from(2u64), U256::from(3u64)]);
+        assert_eq!(
+            ids,
+            vec![U256::from(1u64), U256::from(2u64), U256::from(3u64)]
+        );
     }
 
     #[test]

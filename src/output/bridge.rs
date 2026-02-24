@@ -171,11 +171,26 @@ mod tests {
 
     #[test]
     fn format_status_all_variants() {
-        assert_eq!(format_status(&DepositTransactionStatus::DepositDetected), "Detected");
-        assert_eq!(format_status(&DepositTransactionStatus::Processing), "Processing");
-        assert_eq!(format_status(&DepositTransactionStatus::OriginTxConfirmed), "Confirmed");
-        assert_eq!(format_status(&DepositTransactionStatus::Submitted), "Submitted");
-        assert_eq!(format_status(&DepositTransactionStatus::Completed), "Completed");
+        assert_eq!(
+            format_status(&DepositTransactionStatus::DepositDetected),
+            "Detected"
+        );
+        assert_eq!(
+            format_status(&DepositTransactionStatus::Processing),
+            "Processing"
+        );
+        assert_eq!(
+            format_status(&DepositTransactionStatus::OriginTxConfirmed),
+            "Confirmed"
+        );
+        assert_eq!(
+            format_status(&DepositTransactionStatus::Submitted),
+            "Submitted"
+        );
+        assert_eq!(
+            format_status(&DepositTransactionStatus::Completed),
+            "Completed"
+        );
         assert_eq!(format_status(&DepositTransactionStatus::Failed), "Failed");
     }
 }
